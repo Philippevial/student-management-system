@@ -57,8 +57,8 @@ public class StudentRest {
             if (s.getLastName().equals(lastname))
                 foundStudents.add(s);
 
-        if(foundStudents.isEmpty())
-            throw new NotFoundException("No student with lastname: " +lastname+" was found.");
+        if (foundStudents.isEmpty())
+            throw new NotFoundException("No student with lastname: " + lastname + " was found.");
 
         return Response.ok(foundStudents).build();
     }
@@ -68,5 +68,12 @@ public class StudentRest {
     public Response deleteStudent(@PathParam("id") Long id) {
         studentService.deleteStudent(id);
         return Response.ok().build();
+    }
+
+    @Path("")
+    @PATCH
+    public Response updateStudent(Student student) {
+        studentService.updateStudent(student);
+        return Response.ok(student).build();
     }
 }
