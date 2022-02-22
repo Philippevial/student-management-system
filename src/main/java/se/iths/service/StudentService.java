@@ -5,8 +5,8 @@ import se.iths.entity.Student;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import javax.ws.rs.Path;
 import java.util.List;
+import java.util.Optional;
 
 @Transactional
 public class StudentService {
@@ -18,8 +18,8 @@ public class StudentService {
         entityManager.persist(student);
     }
 
-    public Student getStudentById(Long id) {
-        return entityManager.find(Student.class, id);
+    public Optional<Student> getStudentById(Long id) {
+        return Optional.ofNullable(entityManager.find(Student.class, id));
     }
 
     public List<Student> getAllStudents() {
@@ -33,5 +33,9 @@ public class StudentService {
     public void deleteStudent(Long id) {
         Student foundStudent = entityManager.find(Student.class, id);
         entityManager.remove(foundStudent);
+    }
+
+    public List<Student> getStudentByLastName(String lastname) {
+        return entityManager.createQuery("SELECT s FROM Student s", Student.class).getResultList();
     }
 }
