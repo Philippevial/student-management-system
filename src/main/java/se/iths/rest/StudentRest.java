@@ -5,8 +5,7 @@ import se.iths.service.StudentService;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +22,7 @@ public class StudentRest {
     @POST
     public Response createStudent(Student student) {
         studentService.createStudent(student);
-        return Response.ok(student).build();
+        return Response.ok().status(Response.Status.CREATED).build();
     }
 
     @Path("{id}")
@@ -35,14 +34,14 @@ public class StudentRest {
                 () -> new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
                         .entity("Student with ID " + id + " was not found in database.").type(MediaType.TEXT_PLAIN_TYPE).build()));
 
-        return Response.ok(item).build();
+        return Response.ok(item).status(Response.Status.FOUND).build();
     }
 
     @Path("")
     @GET
     public Response getAllStudents() {
         List<Student> foundStudents = studentService.getAllStudents();
-        return Response.ok(foundStudents).build();
+        return Response.ok(foundStudents).status(Response.Status.FOUND).build();
     }
 
     @Path("lastname")
@@ -60,7 +59,7 @@ public class StudentRest {
         if (foundStudents.isEmpty())
             throw new NotFoundException("No student with lastname: " + lastname + " was found.");
 
-        return Response.ok(foundStudents).build();
+        return Response.ok(foundStudents).status(Response.Status.FOUND).build();
     }
 
     @Path("{id}")
@@ -71,7 +70,7 @@ public class StudentRest {
     }
 
     @Path("")
-    @PATCH
+    @PUT
     public Response updateStudent(Student student) {
         studentService.updateStudent(student);
         return Response.ok(student).build();
