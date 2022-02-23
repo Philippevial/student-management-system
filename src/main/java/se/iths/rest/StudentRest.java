@@ -1,6 +1,7 @@
 package se.iths.rest;
 
 import se.iths.entity.Student;
+import se.iths.errors.ErrorMessage;
 import se.iths.service.StudentService;
 
 import javax.inject.Inject;
@@ -21,7 +22,12 @@ public class StudentRest {
     @Path("")
     @POST
     public Response createStudent(Student student) {
-        studentService.createStudent(student);
+        if(student.getFirstName().isEmpty() || student.getLastName().isEmpty() || student.getEmail().isEmpty())
+            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
+                    .entity(new ErrorMessage("404","One of the required fields is empty, try again!", "/api/v1/students" ))
+                    .type(MediaType.TEXT_PLAIN_TYPE).build());
+
+            studentService.createStudent(student);
         return Response.ok().status(Response.Status.CREATED).build();
     }
 
