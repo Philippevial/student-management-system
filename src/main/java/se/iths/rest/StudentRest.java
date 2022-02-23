@@ -1,13 +1,14 @@
 package se.iths.rest;
 
 import se.iths.entity.Student;
-import se.iths.errors.ErrorMessage;
+import se.iths.error.ErrorMessage;
+import se.iths.exceptions.BadRequestException;
+import se.iths.exceptions.StudentNotFoundException;
 import se.iths.service.StudentService;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,55 +23,55 @@ public class StudentRest {
     @Path("")
     @POST
     public Response createStudent(Student student) {
-        if(student.getFirstName().isEmpty() || student.getLastName().isEmpty() || student.getEmail().isEmpty())
-            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-                    .entity(new ErrorMessage("404","One of the required fields is empty, try again!", "/api/v1/students" ))
-                    .type(MediaType.TEXT_PLAIN_TYPE).build());
-
-            studentService.createStudent(student);
+        if (student.getFirstName().isEmpty() || student.getLastName().isEmpty() || student.getEmail().isEmpty()) {
+            throw new BadRequestException(new ErrorMessage("400", "One of the required fields is empty", "/api/v1/students"));
+        }
+        studentService.createStudent(student);
         return Response.ok().status(Response.Status.CREATED).build();
     }
 
     @Path("{id}")
     @GET
     public Response getStudent(@PathParam("id") Long id) {
-        Optional<Student> foundItem = studentService.getStudentById(id);
+        Optional<Student> foundStudent = studentService.getStudentById(id);
 
-        var item = foundItem.orElseThrow(
-                () -> new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-                        .entity("Student with ID " + id + " was not found in database.").type(MediaType.TEXT_PLAIN_TYPE).build()));
-
-        return Response.ok(item).status(Response.Status.FOUND).build();
+        if (foundStudent.isEmpty())
+            throw new StudentNotFoundException(new ErrorMessage("404", "Student with id: " + id + " was not found", "/api/v1/students/" + id));
+        return Response.ok(foundStudent).status(Response.Status.FOUND).build();
     }
 
     @Path("")
     @GET
     public Response getAllStudents() {
         List<Student> foundStudents = studentService.getAllStudents();
-        return Response.ok(foundStudents).status(Response.Status.FOUND).build();
+
+        if (foundStudents.isEmpty())
+            throw new StudentNotFoundException(new ErrorMessage("404", "No students found", "123"));
+        return Response.ok(foundStudents).build();
     }
 
     @Path("lastname")
     @Produces(MediaType.APPLICATION_JSON)
     @GET
     public Response getStudentByLastName(@QueryParam("lastname") String lastname) {
-        List<Student> students = studentService.getStudentByLastName(lastname);
-
-        List<Student> foundStudents = new ArrayList<>();
-
-        for (Student s : students)
-            if (s.getLastName().equals(lastname))
-                foundStudents.add(s);
+        List<Student> foundStudents = studentService.getStudentByLastName(lastname);
 
         if (foundStudents.isEmpty())
-            throw new NotFoundException("No student with lastname: " + lastname + " was found.");
+            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
+                    .entity(new ErrorMessage("404", "Found no students with lastname: " + lastname, "/api/v1/students/lastname"))
+                    .type(MediaType.TEXT_PLAIN_TYPE).build());
 
-        return Response.ok(foundStudents).status(Response.Status.FOUND).build();
+        return Response.ok(foundStudents).build();
     }
 
     @Path("{id}")
     @DELETE
     public Response deleteStudent(@PathParam("id") Long id) {
+        Optional<Student> foundStudent = studentService.getStudentById(id);
+
+        if (foundStudent.isEmpty())
+            throw new StudentNotFoundException(new ErrorMessage("404", "Student with id: " + id + " was not found", "/api/v1/students/" + id));
+
         studentService.deleteStudent(id);
         return Response.ok().build();
     }
