@@ -57,9 +57,9 @@ public class StudentRest {
         List<Student> foundStudents = studentService.getStudentByLastName(lastname);
 
         if (foundStudents.isEmpty())
-            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-                    .entity(new ErrorMessage("404", "Found no students with lastname: " + lastname, "/api/v1/students/lastname"))
-                    .type(MediaType.TEXT_PLAIN_TYPE).build());
+            throw new StudentNotFoundException(new ErrorMessage("404"
+                    , "No students with lastname: "+lastname+" was found!"
+                    , "/api/v1/lastname?lastName="+lastname));
 
         return Response.ok(foundStudents).build();
     }
