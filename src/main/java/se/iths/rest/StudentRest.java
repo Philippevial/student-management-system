@@ -26,6 +26,7 @@ public class StudentRest {
         if (student.getFirstName().isEmpty() || student.getLastName().isEmpty() || student.getEmail().isEmpty()) {
             throw new StudentDataInvalidException(new ErrorMessage("401", "Required data is missing", "/api/v1/students"));
         }
+
         studentService.createStudent(student);
         return Response.ok().status(Response.Status.CREATED).build();
     }
@@ -37,6 +38,7 @@ public class StudentRest {
 
         if (foundStudent.isEmpty())
             throw new StudentNotFoundException(new ErrorMessage("404", "Student with id: " + id + " was not found", "/api/v1/students/" + id));
+
         return Response.ok(foundStudent).status(Response.Status.FOUND).build();
     }
 
@@ -47,6 +49,7 @@ public class StudentRest {
 
         if (foundStudents.isEmpty())
             throw new StudentNotFoundException(new ErrorMessage("404", "No students found", "123"));
+
         return Response.ok(foundStudents).build();
     }
 
@@ -58,8 +61,8 @@ public class StudentRest {
 
         if (foundStudents.isEmpty())
             throw new StudentNotFoundException(new ErrorMessage("404"
-                    , "No students with lastname: "+lastname+" was found!"
-                    , "/api/v1/lastname?lastName="+lastname));
+                    , "No students with lastname: " + lastname + " was found!"
+                    , "/api/v1/lastname?lastName=" + lastname));
 
         return Response.ok(foundStudents).build();
     }
@@ -81,8 +84,8 @@ public class StudentRest {
     public Response updateStudent(@PathParam("id") Long id, Student student) {
         Optional<Student> foundStudent = studentService.getStudentById(id);
 
-        if(foundStudent.isEmpty())
-            throw new StudentNotFoundException(new ErrorMessage("404", "Student with id: "+id+" was not found", "/api/v1/students/"+id));
+        if (foundStudent.isEmpty())
+            throw new StudentNotFoundException(new ErrorMessage("404", "Student with id: " + id + " was not found", "/api/v1/students/" + id));
 
         studentService.updateStudent(student);
         return Response.ok(student).build();
