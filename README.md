@@ -63,6 +63,7 @@ Update student
 **PUT** http://localhost:8080/student-management-system/api/v1/students/{id}
 - Updates student with given ID in the URL **_AND_** the JSON-body.
 
+
     {
       "firstName" : "Name",
       "lastName" : "Lastname",
@@ -74,5 +75,5 @@ Update student
 
 Delete student
 -  
-http://localhost:8080/student-management-system/api/v1/students/{id}
+**DELETE** http://localhost:8080/student-management-system/api/v1/students/{id}
 - Deletes student with ID given in URL.
