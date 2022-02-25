@@ -30,15 +30,16 @@ Create a student
    
 - Enter the student credentials in JSON format as shown below:
 Mandatory fields: **firstName, lastName, email.**
-  
-
-    {
-     "firstName" : "Name",
-     "lastName" : "Lastname",
-     "email" : "MAIL@MAIL.com",
-     "phoneNumber" : "1234567890"
-     }
-
+```
+   {
+    "firstName" : "Name",
+    "lastName" : "Lastname",
+    "email" : "mail@mail.com",
+    "phoneNumber" : "1234567890"
+   }
+```
+   
+   
 Get all students**
 - 
 **GET** http://localhost:8080/student-management-system/api/v1/students
@@ -62,17 +63,16 @@ Update student
 - 
 **PUT** http://localhost:8080/student-management-system/api/v1/students/{id}
 - Updates student with given ID in the URL **_AND_** the JSON-body.
-
-
-    {
-      "firstName" : "Name",
-      "lastName" : "Lastname",
-      "id"  : 1,
-      "email" : "MAIL@MAIL.com",
-      "phoneNumber" : "1234567890"
-     }
-
-
+   
+```
+   {
+    "firstName" : "Name",
+    "lastName" : "Lastname",
+    "email" : "mail@mail.com",
+    "phoneNumber" : "1234567890"
+   }
+```
+   
 Delete student
 -  
 **DELETE** http://localhost:8080/student-management-system/api/v1/students/{id}
