@@ -2,7 +2,7 @@ package se.iths.rest;
 
 import se.iths.entity.Student;
 import se.iths.error.ErrorMessage;
-import se.iths.exceptions.BadRequestException;
+import se.iths.exceptions.StudentDataInvalidException;
 import se.iths.exceptions.StudentNotFoundException;
 import se.iths.service.StudentService;
 
@@ -76,9 +76,14 @@ public class StudentRest {
         return Response.ok().build();
     }
 
-    @Path("")
+    @Path("{id}")
     @PUT
-    public Response updateStudent(Student student) {
+    public Response updateStudent(@PathParam("id") Long id, Student student) {
+        Optional<Student> foundStudent = studentService.getStudentById(id);
+
+        if(foundStudent.isEmpty())
+            throw new StudentNotFoundException(new ErrorMessage("404", "Student with id: "+id+" was not found", "/api/v1/students/"+id));
+
         studentService.updateStudent(student);
         return Response.ok(student).build();
     }

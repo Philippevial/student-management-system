@@ -17,5 +17,4 @@ public class StudentNotFoundException extends WebApplicationException {
                 .type(MediaType.APPLICATION_JSON_TYPE)
                 .build());
     }
-
 }
