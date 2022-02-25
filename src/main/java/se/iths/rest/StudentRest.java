@@ -24,7 +24,7 @@ public class StudentRest {
     @POST
     public Response createStudent(Student student) {
         if (student.getFirstName().isEmpty() || student.getLastName().isEmpty() || student.getEmail().isEmpty()) {
-            throw new BadRequestException(new ErrorMessage("400", "One of the required fields is empty", "/api/v1/students"));
+            throw new StudentDataInvalidException(new ErrorMessage("401", "Required data is missing", "/api/v1/students"));
         }
         studentService.createStudent(student);
         return Response.ok().status(Response.Status.CREATED).build();
@@ -70,7 +70,7 @@ public class StudentRest {
         Optional<Student> foundStudent = studentService.getStudentById(id);
 
         if (foundStudent.isEmpty())
-            throw new StudentNotFoundException(new ErrorMessage("404", "Student with id: " + id + " was not found", "/api/v1/students/" + id));
+            return Response.ok().status(Response.Status.NO_CONTENT).build();
 
         studentService.deleteStudent(id);
         return Response.ok().build();
