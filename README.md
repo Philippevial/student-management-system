@@ -74,5 +74,5 @@ Update student
 
 Delete student
 -  
-http://localhost:8080/student-management-system/api/v1/students/{id}
+**DELETE** http://localhost:8080/student-management-system/api/v1/students/{id}
 - Deletes student with ID given in URL.
