@@ -5,6 +5,8 @@
     <persistence-unit name="myPU" transaction-type="JTA">
         <jta-data-source>java:app/MyApp/MyDS</jta-data-source>
         <class>se.iths.entity.Student</class>
+        <class>se.iths.entity.Teacher</class>
+        <class>se.iths.entity.Subject</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
             <property name="eclipselink.logging.level.sql" value="FINE"/>
