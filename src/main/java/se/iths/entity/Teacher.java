@@ -1,6 +1,5 @@
 package se.iths.entity;
 
-import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -8,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Student {
+public class Teacher {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,30 +21,21 @@ public class Student {
     private String email;
     private String phoneNumber;
 
-    @ManyToMany
+    @OneToMany
     private List<Subject> subjects = new ArrayList<>();
 
-    public Student(String firstName, String lastName, String email) {
+    public Teacher(String firstName, String lastName, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
     }
 
-    public Student() {
+    public Teacher() {
     }
 
     public void addSubject(Subject subject) {
         subjects.add(subject);
-        subject.getStudent().add(this);
-    }
-
-    @JsonbTransient
-    public List<Subject> getSubjects() {
-        return subjects;
-    }
-
-    public void setSubjects(List<Subject> subjects) {
-        this.subjects = subjects;
+        subject.setTeacher(this);
     }
 
     public Long getId() {
@@ -86,5 +76,13 @@ public class Student {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public List<Subject> getSubjects() {
+        return subjects;
+    }
+
+    public void setSubjects(List<Subject> subjects) {
+        this.subjects = subjects;
     }
 }
