@@ -1,6 +1,6 @@
 package se.iths.service;
 
-import se.iths.entity.Student;
+import se.iths.entity.Subject;
 import se.iths.entity.Teacher;
 
 import javax.persistence.EntityManager;
@@ -40,5 +40,10 @@ public class TeacherService {
         return entityManager.createQuery("SELECT t FROM Teacher t WHERE t.lastName = :lastName", Teacher.class)
                 .setParameter("lastName", lastName)
                 .getResultList();
+    }
+
+    public Subject addSubjectToTeacher(Long id, Subject subject) {
+        entityManager.find(Teacher.class, id).addSubject(subject);
+        return subject;
     }
 }

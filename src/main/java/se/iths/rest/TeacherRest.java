@@ -1,5 +1,6 @@
 package se.iths.rest;
 
+import se.iths.entity.Subject;
 import se.iths.entity.Teacher;
 import se.iths.error.ErrorMessage;
 import se.iths.exceptions.EntityDataInvalidException;
@@ -95,6 +96,20 @@ public class TeacherRest {
                     , "/api/v1/teachers/lastname?lastname=" + lastname));
 
         return Response.ok(foundTeachers).build();
+    }
+
+    @Path("{id}/subject")
+    @POST
+    public Response addSubjectToTeacher(@PathParam("id") Long id, Subject subject) {
+        Optional<Teacher> foundTeacher = teacherService.getTeacherById(id);
+
+        if(foundTeacher.isEmpty())
+            throw new EntityNotFoundException(new ErrorMessage("404",
+                    "Teacher with ID: "+id+" was not found!",
+                    "/api/v1/teachers/"+id));
+
+        teacherService.addSubjectToTeacher(id, subject);
+        return Response.ok().build();
     }
 
 }
