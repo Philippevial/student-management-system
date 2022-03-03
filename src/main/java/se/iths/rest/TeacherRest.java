@@ -26,7 +26,9 @@ public class TeacherRest {
     @POST
     public Response createTeacher(Teacher teacher) {
         if (teacher.getFirstName().isEmpty() || teacher.getLastName().isEmpty() || teacher.getEmail().isEmpty()) {
-            throw new EntityDataInvalidException(new ErrorMessage("401", "Required data is missing", "/api/v1/teachers"));
+            throw new EntityDataInvalidException(new ErrorMessage("401",
+                    "Required data is missing",
+                    "/api/v1/teachers"));
         }
 
         teacherService.createTeacher(teacher);
@@ -39,9 +41,7 @@ public class TeacherRest {
         Optional<Teacher> foundTeacher = teacherService.getTeacherById(id);
 
         if(foundTeacher.isEmpty())
-            throw new EntityNotFoundException(new ErrorMessage("404",
-                    "Teacher with ID: "+id+" was not found!",
-                    "/api/v1/teachers/"+id));
+            throwEntityNotFoundException(id);
 
         return Response.ok(foundTeacher).build();
     }
@@ -52,7 +52,9 @@ public class TeacherRest {
         List<Teacher> foundTeachers = teacherService.getAllStudents();
 
         if (foundTeachers.isEmpty())
-            throw new EntityNotFoundException(new ErrorMessage("404", "No teachers found", "/api/v1/teachers"));
+            throw new EntityNotFoundException(new ErrorMessage("404",
+                    "No teachers found",
+                    "/api/v1/teachers"));
 
         return Response.ok(foundTeachers).build();
     }
@@ -76,9 +78,7 @@ public class TeacherRest {
         Optional<Teacher> foundTeacher = teacherService.getTeacherById(id);
 
         if(foundTeacher.isEmpty())
-            throw new EntityNotFoundException((new ErrorMessage("404",
-                    "Teacher with ID: "+id+" was not found!",
-                    "/api/v1/teachers/"+id)));
+            throwEntityNotFoundException(id);
 
         teacherService.updateTeacher(teacher);
         return Response.ok(teacher).build();
@@ -91,9 +91,7 @@ public class TeacherRest {
         List<Teacher> foundTeachers = teacherService.getTeacherByLastName(lastname);
 
         if (foundTeachers.isEmpty())
-            throw new EntityNotFoundException(new ErrorMessage("404"
-                    , "No teachers with lastname: " + lastname + " was found!"
-                    , "/api/v1/teachers/lastname?lastname=" + lastname));
+            throwEntityNotFoundException(lastname);
 
         return Response.ok(foundTeachers).build();
     }
@@ -104,12 +102,21 @@ public class TeacherRest {
         Optional<Teacher> foundTeacher = teacherService.getTeacherById(id);
 
         if(foundTeacher.isEmpty())
-            throw new EntityNotFoundException(new ErrorMessage("404",
-                    "Teacher with ID: "+id+" was not found!",
-                    "/api/v1/teachers/"+id));
+            throwEntityNotFoundException(id);
 
         teacherService.addSubjectToTeacher(id, subject);
         return Response.ok().build();
     }
 
+    private void throwEntityNotFoundException(Long id) {
+        throw new EntityNotFoundException((new ErrorMessage("404",
+                "Teacher with ID: "+ id +" was not found!",
+                "/api/v1/teachers/"+ id)));
+    }
+
+    private void throwEntityNotFoundException(String lastname) {
+        throw new EntityNotFoundException(new ErrorMessage("404"
+                , "No teachers with lastname: " + lastname + " was found!"
+                , "/api/v1/teachers/lastname?lastname=" + lastname));
+    }
 }
