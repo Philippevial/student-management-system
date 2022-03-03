@@ -73,4 +73,14 @@ public class Teacher {
     public void setSubjects(Set<Subject> subjects) {
         this.subjects = subjects;
     }
+
+    public void addSubject(Subject subject) {
+        subjects.add(subject);
+        subject.setTeacher(this);
+    }
+
+    public void removeSubject(Subject subject) {
+        subjects.remove(subject);
+        subject.setTeacher(null);
+    }
 }

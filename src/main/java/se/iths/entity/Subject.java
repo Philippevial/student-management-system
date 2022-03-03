@@ -29,6 +29,12 @@ public class Subject {
         student.addSubject(this);
     }
 
+    public void removeStudent(Student student) {
+        students.remove(student);
+        student.setSubjects(null);
+    }
+
+
     public Long getId() {
         return id;
     }
