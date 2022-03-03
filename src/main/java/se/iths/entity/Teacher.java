@@ -1,10 +1,11 @@
 package se.iths.entity;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Teacher {
@@ -21,22 +22,8 @@ public class Teacher {
     private String email;
     private String phoneNumber;
 
-    @OneToMany
-    private List<Subject> subjects = new ArrayList<>();
-
-    public Teacher(String firstName, String lastName, String email) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-    }
-
-    public Teacher() {
-    }
-
-    public void addSubject(Subject subject) {
-        subjects.add(subject);
-        subject.setTeacher(this);
-    }
+    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
+    private Set<Subject> subjects = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -78,11 +65,12 @@ public class Teacher {
         this.phoneNumber = phoneNumber;
     }
 
-    public List<Subject> getSubjects() {
+    @JsonbTransient
+    public Set<Subject> getSubjects() {
         return subjects;
     }
 
-    public void setSubjects(List<Subject> subjects) {
+    public void setSubjects(Set<Subject> subjects) {
         this.subjects = subjects;
     }
 }

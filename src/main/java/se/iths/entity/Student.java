@@ -4,8 +4,8 @@ import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Student {
@@ -22,29 +22,25 @@ public class Student {
     private String email;
     private String phoneNumber;
 
-    @ManyToMany
-    private List<Subject> subjects = new ArrayList<>();
-
-    public Student(String firstName, String lastName, String email) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-    }
-
-    public Student() {
-    }
+    @ManyToMany(mappedBy = "students", cascade = CascadeType.ALL)
+    private Set<Subject> subjects = new HashSet<>();
 
     public void addSubject(Subject subject) {
         subjects.add(subject);
-        subject.getStudent().add(this);
+        subject.addStudent(this);
+    }
+
+    public void removeSubject(Subject subject) {
+        subjects.remove(subject);
+        subject.setStudent(null);
     }
 
     @JsonbTransient
-    public List<Subject> getSubjects() {
+    public Set<Subject> getSubjects() {
         return subjects;
     }
 
-    public void setSubjects(List<Subject> subjects) {
+    public void setSubjects(Set<Subject> subjects) {
         this.subjects = subjects;
     }
 

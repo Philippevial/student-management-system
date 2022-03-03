@@ -2,8 +2,8 @@ package se.iths.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Subject {
@@ -14,15 +14,19 @@ public class Subject {
     private String subjectName;
 
     @ManyToMany
-    private List<Student> students = new ArrayList<>();
+    @JoinTable(name = "STUDENT_SUBJECT",
+            joinColumns = @JoinColumn(name = "SUBJECT_ID", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "STUDENT_ID", referencedColumnName = "id"))
+    private Set<Student> students = new HashSet<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "TEACHER_ID", referencedColumnName = "id")
     private Teacher teacher;
 
 
     public void addStudent(Student student) {
         students.add(student);
-        student.getSubjects().add(this);
+        student.addSubject(this);
     }
 
     public Long getId() {
@@ -41,11 +45,11 @@ public class Subject {
         this.subjectName = subjectName;
     }
 
-    public List<Student> getStudent() {
+    public Set<Student> getStudent() {
         return students;
     }
 
-    public void setStudent(List<Student> students) {
+    public void setStudent(Set<Student> students) {
         this.students = students;
     }
 
