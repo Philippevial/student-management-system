@@ -2,8 +2,8 @@ package se.iths.rest;
 
 import se.iths.entity.Student;
 import se.iths.error.ErrorMessage;
-import se.iths.exceptions.StudentDataInvalidException;
-import se.iths.exceptions.StudentNotFoundException;
+import se.iths.exceptions.EntityDataInvalidException;
+import se.iths.exceptions.EntityNotFoundException;
 import se.iths.service.StudentService;
 
 import javax.inject.Inject;
@@ -24,7 +24,9 @@ public class StudentRest {
     @POST
     public Response createStudent(Student student) {
         if (student.getFirstName().isEmpty() || student.getLastName().isEmpty() || student.getEmail().isEmpty()) {
-            throw new StudentDataInvalidException(new ErrorMessage("401", "Required data is missing", "/api/v1/students"));
+            throw new EntityDataInvalidException(new ErrorMessage("401",
+                    "Required data is missing",
+                    "/api/v1/students"));
         }
 
         studentService.createStudent(student);
@@ -37,7 +39,7 @@ public class StudentRest {
         Optional<Student> foundStudent = studentService.getStudentById(id);
 
         if (foundStudent.isEmpty())
-            throw new StudentNotFoundException(new ErrorMessage("404", "Student with id: " + id + " was not found", "/api/v1/students/" + id));
+            throw new EntityNotFoundException(new ErrorMessage("404", "Student with id: " + id + " was not found", "/api/v1/students/" + id));
 
         return Response.ok(foundStudent).status(Response.Status.FOUND).build();
     }
@@ -48,7 +50,7 @@ public class StudentRest {
         List<Student> foundStudents = studentService.getAllStudents();
 
         if (foundStudents.isEmpty())
-            throw new StudentNotFoundException(new ErrorMessage("404", "No students found", "123"));
+            throw new EntityNotFoundException(new ErrorMessage("404", "No students found", "/api/v1/students"));
 
         return Response.ok(foundStudents).build();
     }
@@ -60,9 +62,9 @@ public class StudentRest {
         List<Student> foundStudents = studentService.getStudentByLastName(lastname);
 
         if (foundStudents.isEmpty())
-            throw new StudentNotFoundException(new ErrorMessage("404"
+            throw new EntityNotFoundException(new ErrorMessage("404"
                     , "No students with lastname: " + lastname + " was found!"
-                    , "/api/v1/lastname?lastName=" + lastname));
+                    , "/api/v1/students/lastname?lastname=" + lastname));
 
         return Response.ok(foundStudents).build();
     }
@@ -85,7 +87,7 @@ public class StudentRest {
         Optional<Student> foundStudent = studentService.getStudentById(id);
 
         if (foundStudent.isEmpty())
-            throw new StudentNotFoundException(new ErrorMessage("404", "Student with id: " + id + " was not found", "/api/v1/students/" + id));
+            throw new EntityNotFoundException(new ErrorMessage("404", "Student with id: " + id + " was not found", "/api/v1/students/" + id));
 
         studentService.updateStudent(student);
         return Response.ok(student).build();
