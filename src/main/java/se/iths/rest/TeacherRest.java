@@ -1,6 +1,5 @@
 package se.iths.rest;
 
-import se.iths.entity.Subject;
 import se.iths.entity.Teacher;
 import se.iths.error.ErrorMessage;
 import se.iths.exceptions.EntityDataInvalidException;
@@ -94,18 +93,6 @@ public class TeacherRest {
             throwEntityNotFoundException(lastname);
 
         return Response.ok(foundTeachers).build();
-    }
-
-    @Path("{id}/subject")
-    @POST
-    public Response createSubjectToTeacher(@PathParam("id") Long id, Subject subject) {
-        Optional<Teacher> foundTeacher = teacherService.getTeacherById(id);
-
-        if(foundTeacher.isEmpty())
-            throwEntityNotFoundException(id);
-
-        teacherService.addSubjectToTeacher(id, subject);
-        return Response.ok(subject).build();
     }
 
     private void throwEntityNotFoundException(Long id) {
