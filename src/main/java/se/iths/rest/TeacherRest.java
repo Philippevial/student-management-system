@@ -98,14 +98,14 @@ public class TeacherRest {
 
     @Path("{id}/subject")
     @POST
-    public Response addSubjectToTeacher(@PathParam("id") Long id, Subject subject) {
+    public Response createSubjectToTeacher(@PathParam("id") Long id, Subject subject) {
         Optional<Teacher> foundTeacher = teacherService.getTeacherById(id);
 
         if(foundTeacher.isEmpty())
             throwEntityNotFoundException(id);
 
         teacherService.addSubjectToTeacher(id, subject);
-        return Response.ok().build();
+        return Response.ok(subject).build();
     }
 
     private void throwEntityNotFoundException(Long id) {

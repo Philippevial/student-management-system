@@ -23,7 +23,6 @@ public class Subject {
     @JoinColumn(name = "TEACHER_ID", referencedColumnName = "id")
     private Teacher teacher;
 
-
     public void addStudent(Student student) {
         students.add(student);
         student.addSubject(this);
@@ -33,7 +32,6 @@ public class Subject {
         students.remove(student);
         student.setSubjects(null);
     }
-
 
     public Long getId() {
         return id;

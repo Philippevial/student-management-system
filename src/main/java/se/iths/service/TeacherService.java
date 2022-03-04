@@ -42,8 +42,7 @@ public class TeacherService {
                 .getResultList();
     }
 
-    public Subject addSubjectToTeacher(Long id, Subject subject) {
+    public void addSubjectToTeacher(Long id, Subject subject) {
         entityManager.find(Teacher.class, id).addSubject(subject);
-        return subject;
     }
 }
