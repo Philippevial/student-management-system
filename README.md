@@ -2,9 +2,10 @@
 
 A simple JAX-RS application using a Payara server for student managing in a MySQL database.
 
-Two new entities added with relevant endpoints add CRUD operations
+Two new entities added with relevant endpoints and CRUD operations
  - Teacher
  - Subject.
+
 
    GETTING STARTED:
    -
@@ -21,52 +22,59 @@ Two new entities added with relevant endpoints add CRUD operations
         Open a terminal in the payara/bin directory where you'll find the asadmin file
         Run asadmin deploy <path to war file directory>/student-management-system.war
 
-   How To Use
+How To Use
  - 
  - Download and use Insomnia  https://insomnia.rest/download.
  - Add one of the endpoints listed below in the URL box and hit SEND.
  
 ENDPOINTS 
 -
+	
 Create
 - 
+	
 **POST** http://localhost:8080/student-management-system/api/v1/students
 - Enter the student credentials in JSON format as shown below:
   Mandatory fields: **firstName, lastName, email.**
-
-
-    {
+```
+     {
      "firstName" : "Name",
      "lastName" : "Lastname",
      "email" : "MAIL@MAIL.com",
      "phoneNumber" : "1234567890"
      }
+```
+	
 
 **POST** http://localhost:8080/student-management-system/api/v1/teachers
 - Enter the teacher credentials in JSON format as shown below:
   Mandatory fields: **firstName, lastName, email.**
 
-
+```	
     {
      "firstName" : "Name",
      "lastName" : "Lastname",
      "email" : "MAIL@MAIL.com",
      "phoneNumber" : "1234567890"
      }
-
+```
+	
 **POST** http://localhost:8080/student-management-system/api/v1/subjects
    
 - Enter the subject credentials in JSON format as shown below:
 
 - Mandatory field: **subjectName**
   
-
+	
+```
     {
      "subjectName" : "Name",
     }
-
+```
+	
 Get all
 - 
+	
 **GET** http://localhost:8080/student-management-system/api/v1/students
 - Returns a list with all students added
 
@@ -80,6 +88,7 @@ Get all
 
 Get by ID
    -
+	
 **GET** http://localhost:8080/student-management-system/api/v1/students/{id}
 - Returns student with the ID given in the URL.
 
@@ -104,12 +113,13 @@ Get all subjects by name
 http://localhost:8080/student-management-system/api/v1/subjects/subjectname?subjectname={subjectname}
  - Returns a list of subjects with name added in the URL
 
-Update student
+Update
 - 
 **PUT** http://localhost:8080/student-management-system/api/v1/students/{id}
 - Updates student with given ID in the URL **_AND_** the JSON-body.
 
-
+	
+```
     {
       "firstName" : "Name",
       "lastName" : "Lastname",
@@ -117,12 +127,13 @@ Update student
       "email" : "MAIL@MAIL.com",
       "phoneNumber" : "1234567890"
      }
-
+```
+	
 **PUT** http://localhost:8080/student-management-system/api/v1/teachers/{id}
 - Updates teacher with given ID in the URL **_AND_** the JSON-body.
 
 
-
+```
     {
       "firstName" : "Name",
       "lastName" : "Lastname",
@@ -130,42 +141,45 @@ Update student
       "email" : "MAIL@MAIL.com",
       "phoneNumber" : "1234567890"
      }
+```
 
-
+	
 **PUT** http://localhost:8080/student-management-system/api/v1/subjects/{id}
 - Updates teacher with given ID in the URL **_AND_** the JSON-body.
 
 - **Possible to add Students and/or teacher to a subject via this endpoint, use the format below:**
 
-
-    {
+```
+	{
 	"id": 123,
-    "subjectName": "Subject1",
+    	"subjectName": "Subject1",
 	"student": [
 		{
-			"email": "Student@test.se",
-			"firstName": "Student",
-			"id": 123,
-			"lastName": "Student",
-			"phoneNumber": "123456789"
+		"email": "Student@test.se",
+		"firstName": "Student",
+		"id": 123,
+		"lastName": "Student",
+		"phoneNumber": "123456789"
 		},
 		{
-			"email": "Student2@test.se",
-			"firstName": "Student2",
-			"id": 124,
-			"lastName": "Student2",
-			"phoneNumber": "123456789"
+		"email": "Student2@test.se",
+		"firstName": "Student2",
+		"id": 124,
+		"lastName": "Student2",	
+		"phoneNumber": "123456789"
 		}
 	],
-	"teacher": {
+	"teacher": 
+		{
 		"email": "Teacher@test.se",
 		"firstName": "Teacher",
 		"id": 123,
 		"lastName": "Teacher",
 		"phoneNumber": "123456789"
+		}
 	}
-}
-
+```
+	
 Delete student
 -  
 **DELETE** http://localhost:8080/student-management-system/api/v1/students/{id}
